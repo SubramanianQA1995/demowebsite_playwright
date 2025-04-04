@@ -1,23 +1,32 @@
 import { test, expect } from '@playwright/test';
 
-test('complete checkout flow', async ({ page }) => {
-  // Navigate to saucedemo and login
+test('Sauce Demo checkout flow', async ({ page }) => {
+  // Navigate to the website
   await page.goto('https://www.saucedemo.com/');
-  await page.fill('#user-name', 'standard_user');
-  await page.fill('#password', 'secret_sauce');
-  await page.click('#login-button');
 
-  // Add item to cart
+  // Login
+  await page.fill('[data-test="username"]', 'standard_user');
+  await page.fill('[data-test="password"]', 'secret_sauce');
+  await page.click('[data-test="login-button"]');
+
+  // Add first item to cart
+  await page.click('.inventory_item:first-child [data-test="add-to-cart-sauce-labs-backpack"]');
+
+  // Go to cart
   await page.click('.shopping_cart_link');
+
+  // Start checkout
   await page.click('[data-test="checkout"]');
 
   // Fill checkout information
   await page.fill('[data-test="firstName"]', 'John');
   await page.fill('[data-test="lastName"]', 'Doe');
   await page.fill('[data-test="postalCode"]', '12345');
-
-  // Complete checkout process
+  
+  // Continue with checkout
   await page.click('[data-test="continue"]');
+
+  // Finish checkout
   await page.click('[data-test="finish"]');
 
   // Verify order completion
